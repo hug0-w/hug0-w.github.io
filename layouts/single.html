@@ -1,0 +1,71 @@
+{{- define "main" }}
+{{- $tocHeads := findRE "<h[2-3][^>]*id=\"[^\"]+\"[^>]*>(.|\n)+?</h[2-3]>" .Content }}
+<article class="post-single{{ if and (.Param "ShowToc") (ge (len $tocHeads) 2) }} has-toc{{ end }}">
+
+  <header class="post-header">
+    {{- partial "breadcrumbs.html" . }}
+    <h1 class="post-title reveal" style="--i:0">
+      {{ .Title }}
+      {{- if .Draft }}<span class="entry-hint" title="Draft">Draft</span>{{ end }}
+    </h1>
+    {{- with .Description }}<p class="post-description reveal" style="--i:1">{{ . }}</p>{{ end }}
+
+    {{- if not (.Param "hideMeta") }}
+    {{- /* Reading time drawn as a dimension line across the text measure */}}
+    <div class="dimension reveal" style="--i:2" aria-label="Published {{ .Date | time.Format ":date_long" }}, {{ .ReadingTime }} minute read">
+      <time datetime="{{ .Date | time.Format "2006-01-02" }}">{{ .Date | time.Format "02 Jan 2006" }}</time>
+      <span class="dimension-line" aria-hidden="true"><span>{{ .ReadingTime }} min read</span></span>
+      {{- with (partial "author.html" .) }}<span class="dimension-author">{{ . }}</span>{{ end }}
+    </div>
+    {{- end }}
+  </header>
+
+  {{- if and (.Param "ShowToc") (ge (len $tocHeads) 2) }}
+  <nav class="floor-directory" aria-label="Contents">
+    <p class="floor-label">Contents</p>
+    <ol>
+      {{- range $i, $h := $tocHeads }}
+      {{- $id := index (findRESubmatch "id=\"([^\"]+)\"" $h 1) 0 1 }}
+      {{- $lvl := index (findRE "[23]" $h 1) 0 }}
+      <li class="lvl-{{ $lvl }}"><a href="#{{ $id }}">{{ $h | plainify | htmlUnescape }}</a></li>
+      {{- end }}
+    </ol>
+  </nav>
+  {{- end }}
+
+  {{- if .Content }}
+  <div class="post-content md-content reveal" style="--i:3">
+    {{- if not (.Param "disableAnchoredHeadings") }}
+    {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}{{ .Content }}{{ end }}
+  </div>
+  {{- end }}
+
+  {{- partial "extend_post_content.html" . }}
+
+  <footer class="post-footer">
+    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+    {{- with ($.GetTerms $tags) }}
+    <ul class="post-tags">
+      {{- range . }}<li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>{{ end }}
+    </ul>
+    {{- end }}
+
+    {{- if (.Param "ShowPostNavLinks") }}
+    {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+    {{- if and (gt (len $pages) 1) (in $pages .) }}
+    <nav class="paginav" aria-label="More posts">
+      {{- with $pages.Next . }}
+      <a class="prev" href="{{ .Permalink }}"><span class="dir">← Earlier</span><span class="t">{{ .Title }}</span></a>
+      {{- end }}
+      {{- with $pages.Prev . }}
+      <a class="next" href="{{ .Permalink }}"><span class="dir">Later →</span><span class="t">{{ .Title }}</span></a>
+      {{- end }}
+    </nav>
+    {{- end }}
+    {{- end }}
+  </footer>
+
+  {{- if (.Param "comments") }}{{ partial "comments.html" . }}{{ end }}
+</article>
+{{- end }}

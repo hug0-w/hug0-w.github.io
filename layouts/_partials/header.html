@@ -1,0 +1,42 @@
+{{- /*
+  "Cantilever" header.
+  A fixed structural column (the rail) carries the wordmark, a reading-progress
+  "elevation" line and the theme switch. Navigation floats top-right, off-axis.
+*/ -}}
+{{- $name := site.Params.author | default site.Title }}
+{{- $page_url := .Permalink | absLangURL }}
+<header class="header">
+  <aside class="rail" aria-label="Site">
+    <a class="rail-mark" href="{{ "" | absLangURL }}" accesskey="h" title="{{ site.Title }} (Alt + H)">
+      <span class="rail-mark-dot" aria-hidden="true"></span>
+      <span class="rail-mark-text">{{ $name }}</span>
+    </a>
+
+    <div class="rail-elevation" aria-hidden="true"><span id="elevation-fill"></span></div>
+
+    {{- if not site.Params.disableThemeToggle }}
+    <button id="theme-toggle" class="theme-toggle" accesskey="t" title="Light / dark (Alt + T)" aria-label="Toggle light and dark theme">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.25"/>
+        <path class="aperture" d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>
+      </svg>
+    </button>
+    {{- end }}
+  </aside>
+
+  <nav class="topnav" aria-label="Main">
+    <a class="topnav-home" href="{{ "" | absLangURL }}">{{ $name }}</a>
+    <ul id="menu" class="menu">
+      {{- range $i, $m := site.Menus.main }}
+      {{- $menu_item_url := (cond (strings.HasSuffix .URL "/") .URL (printf "%s/" .URL)) | absLangURL }}
+      {{- $is_search := eq (site.GetPage .KeyName).Layout `search` }}
+      <li>
+        <a href="{{ .URL | absLangURL }}" {{- if eq $menu_item_url $page_url }} aria-current="page" class="active"{{ end }}
+          title="{{ .Name }}{{ if $is_search }} (Alt + /){{ end }}" {{- if $is_search }} accesskey="/"{{ end }}>
+          <span class="menu-idx">{{ printf "%02d" (add $i 1) }}</span>{{ .Name }}
+        </a>
+      </li>
+      {{- end }}
+    </ul>
+  </nav>
+</header>

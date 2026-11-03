@@ -1,0 +1,100 @@
+{{- if not (.Param "hideFooter") }}
+<footer class="footer">
+  <span>&copy; {{ now.Year }} {{ site.Params.author | default site.Title }}</span>
+  <span class="footer-credit">Built with <a href="https://gohugo.io/" rel="noopener" target="_blank">Hugo</a> &amp;
+    <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a></span>
+</footer>
+{{- end }}
+
+{{- /* Foundation stone: the crest sits on its own lit plaque so it reads in both themes */}}
+<a class="cornerstone" href="https://www.cam.ac.uk/" target="_blank" rel="noopener" aria-label="University of Cambridge">
+  <img src="{{ "images/cambridgelogo.png" | relURL }}" alt="University of Cambridge" width="480" height="480" loading="lazy" decoding="async">
+</a>
+
+<a href="#top" id="top-link" class="top-link hidden" aria-label="Back to top" title="Back to top (Alt + G)" accesskey="g">↑</a>
+
+{{- partial "extend_footer.html" . }}
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.documentElement;
+
+  /* In-page anchors: smooth scroll + move focus */
+  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const id = decodeURIComponent(a.getAttribute('href').slice(1));
+    const t = id === 'top' ? document.body : document.getElementById(id);
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    if (t.tabIndex < 0 && !t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+    t.focus({ preventScroll: true });
+    history[id === 'top' ? 'replaceState' : 'pushState'](null, '', id === 'top' ? ' ' : '#' + id);
+  }));
+
+  /* Elevation line (reading progress) + back-to-top, one rAF per scroll */
+  const fill = document.getElementById('elevation-fill');
+  const top = document.getElementById('top-link');
+  let ticking = false;
+  const onScroll = () => {
+    const max = root.scrollHeight - innerHeight;
+    const p = max > 0 ? scrollY / max : 0;
+    if (fill) fill.style.transform = `scaleY(${p})`;
+    if (top) top.classList.toggle('hidden', scrollY < innerHeight);
+    root.classList.toggle('scrolled', scrollY > 24);
+    ticking = false;
+  };
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
+
+  /* Floor directory: highlight the section in view */
+  const links = [...document.querySelectorAll('.floor-directory a')];
+  if (links.length && 'IntersectionObserver' in window) {
+    const byId = new Map(links.map(l => [decodeURIComponent(l.hash.slice(1)), l]));
+    const heads = [...byId.keys()].map(id => document.getElementById(id)).filter(Boolean);
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          links.forEach(l => l.classList.remove('is-active'));
+          byId.get(en.target.id)?.classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '0px 0px -70% 0px' });
+    heads.forEach(h => io.observe(h));
+  }
+
+  /* Theme switch: the new theme sweeps out of the toggle like light through an aperture */
+  const btn = document.getElementById('theme-toggle');
+  if (btn) btn.addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    const apply = () => { root.dataset.theme = next; try { localStorage.setItem('pref-theme', next); } catch (_) {} };
+    if (reduce || !document.startViewTransition) { apply(); return; }
+    const r = btn.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    root.classList.add('theme-sweep');
+    const vt = document.startViewTransition(apply);
+    vt.ready.then(() => root.animate(
+      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
+      { duration: 700, easing: 'cubic-bezier(.65,0,.35,1)', pseudoElement: '::view-transition-new(root)' }
+    ));
+    vt.finished.finally(() => root.classList.remove('theme-sweep'));
+  });
+})();
+</script>
+
+{{- if (and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search") (.Param "ShowCodeCopyButtons")) }}
+<script>
+  document.querySelectorAll('pre > code').forEach(code => {
+    const box = code.closest('.highlight') || code.parentNode;
+    const b = document.createElement('button');
+    b.className = 'copy-code'; b.type = 'button'; b.textContent = 'copy';
+    b.addEventListener('click', () => {
+      navigator.clipboard?.writeText(code.textContent).then(() => {
+        b.textContent = 'copied'; setTimeout(() => b.textContent = 'copy', 1600);
+      });
+    });
+    box.appendChild(b);
+  });
+</script>
+{{- end }}
