@@ -25,7 +25,7 @@ taxonomies:
 params:
   env: production
   title: My Blog
-  description: "Notes on machine learning, math and software."
+  description: "Notes on machine learning."
   author: Your Name
   defaultTheme: auto
   ShowReadingTime: true
