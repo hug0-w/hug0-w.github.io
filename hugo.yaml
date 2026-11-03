@@ -41,8 +41,7 @@ params:
   homeInfoParams:
     Title: "Hi there 👋"
     Content: >
-      Welcome to my blog. I write long-form notes on machine learning,
-      mathematics and whatever else I'm learning.
+      Welcome to my blog. I am a PhD student at the MRC Biostatistics Unit based at the University of Cambridge.
 
   socialIcons:
     - name: github
