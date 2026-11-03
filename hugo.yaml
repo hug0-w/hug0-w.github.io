@@ -26,7 +26,7 @@ params:
   env: production
   title: My Blog
   description: "Notes on machine learning."
-  author: Your Name
+  author: Hugo Wharton
   defaultTheme: auto
   ShowReadingTime: true
   ShowShareButtons: false
