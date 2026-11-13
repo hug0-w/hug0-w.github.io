@@ -1,77 +1,45 @@
 baseURL: https://hug0-w.github.io/
-locale: en-gb
-title: My Blog
-theme: PaperMod
+languageCode: en-gb
+title: Hugo Wharton
 
 enableRobotsTXT: true
 buildDrafts: false
 buildFuture: false
+
+# No tag pages: the site is just an intro, posts and publications.
+disableKinds: [taxonomy, term]
+
 pagination:
-  pagerSize: 10
+  pagerSize: 20
 
 minify:
   disableXML: true
   minifyOutput: true
 
 outputs:
-  home:
-    - HTML
-    - RSS
-    - JSON # Fuse.js search index
-
-taxonomies:
-  tag: tags
+  home: [HTML, RSS]
+  section: [HTML, RSS]
 
 params:
-  env: production
-  title: My Blog
-  description: "Notes on machine learning."
   author: Hugo Wharton
-  defaultTheme: auto
-  ShowReadingTime: true
-  ShowShareButtons: false
-  ShowPostNavLinks: true
-  ShowBreadCrumbs: true
-  ShowCodeCopyButtons: true
-  ShowToc: true
-  TocOpen: false
-  ShowWordCount: false
-  disableSpecial1stPost: true
-
-  homeInfoParams:
-    Title: "Hi there 👋"
-    Content: >
-      Welcome to my blog. I am a PhD student at the MRC Biostatistics Unit based at the University of Cambridge.
-
-  socialIcons:
-    - name: github
+  description: "PhD student at the MRC Biostatistics Unit, University of Cambridge."
+  # Plain text links shown on the home page.
+  links:
+    - name: GitHub
       url: "https://github.com/username"
-    - name: googlescholar
+    - name: Google Scholar
       url: "https://scholar.google.com/citations?user=YOUR_ID"
-
-  fuseOpts:
-    isCaseSensitive: false
-    shouldSort: true
-    location: 0
-    distance: 1000
-    threshold: 0.4
-    minMatchCharLength: 0
-    keys: ["title", "permalink", "summary", "content"]
+  # Set to true to load KaTeX on every page; or set `math: true` per post.
+  math: false
 
 menu:
   main:
-    - identifier: archives
-      name: Archive
-      url: /archives/
+    - name: Posts
+      pageRef: /posts
       weight: 10
-    - identifier: search
-      name: Search
-      url: /search/
+    - name: Publications
+      pageRef: /publications
       weight: 20
-    - identifier: tags
-      name: Tags
-      url: /tags/
-      weight: 30
 
 markup:
   goldmark:
@@ -84,6 +52,6 @@ markup:
     renderer:
       unsafe: true
   highlight:
+    # Plain monospace code, no syntax colours.
     noClasses: false
     codeFences: true
-    guessSyntax: true

@@ -1,0 +1,33 @@
+{{- define "main" }}
+<h1>{{ site.Params.author | default site.Title }}</h1>
+{{ .Content }}
+
+{{- with site.Params.links }}
+<section aria-labelledby="links-heading">
+  <h2 id="links-heading">Links</h2>
+  <ul class="link-list" role="list">
+    {{- range . }}
+    <li><a href="{{ .url }}">{{ .name }}</a></li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}
+
+{{- $posts := where site.RegularPages "Section" "posts" }}
+<section aria-labelledby="posts-heading">
+  <h2 id="posts-heading">Posts</h2>
+  {{- with $posts }}
+  {{ partial "post-list.html" (first 5 .) }}
+  {{- if gt (len .) 5 }}<p><a href="{{ "/posts/" | relLangURL }}">All posts</a></p>{{ end }}
+  {{- else }}
+  <p>Nothing here yet.</p>
+  {{- end }}
+</section>
+
+{{- with site.GetPage "/publications" }}
+<section aria-labelledby="pubs-heading">
+  <h2 id="pubs-heading">Publications</h2>
+  <p>{{ .Description | default "Papers and preprints." }} <a href="{{ .RelPermalink }}">See the publication list</a>.</p>
+</section>
+{{- end }}
+{{- end }}

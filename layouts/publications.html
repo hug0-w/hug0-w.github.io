@@ -1,0 +1,25 @@
+{{- define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+{{- /* Entries live in data/publications.yaml, newest year first. */}}
+{{- $pubs := site.Data.publications }}
+{{- with $pubs }}
+<ol class="pub-list" role="list" reversed>
+  {{- range sort . "year" "desc" }}
+  <li>
+    {{ .authors }} ({{ .year }}).
+    {{ if .url }}<a href="{{ .url }}">{{ .title }}</a>{{ else }}{{ .title }}{{ end }}.
+    {{- with .venue }} <em>{{ . }}</em>.{{ end }}
+    {{- with .note }} {{ . }}.{{ end }}
+    {{- with .links }}
+    <span class="pub-links">
+      {{- range . }} <a href="{{ .url }}">{{ .name }}</a>{{ end }}
+    </span>
+    {{- end }}
+  </li>
+  {{- end }}
+</ol>
+{{- else }}
+<p>Nothing here yet.</p>
+{{- end }}
+{{- end }}

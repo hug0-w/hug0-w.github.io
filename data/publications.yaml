@@ -1,0 +1,15 @@
+# One entry per publication. Fields: authors, year, title, venue (optional),
+# url (optional, links the title), note (optional), links (optional list).
+# Example:
+#
+# - authors: "Wharton H, Coauthor A"
+#   year: 2026
+#   title: "A paper title"
+#   venue: "Journal or conference name"
+#   url: "https://doi.org/..."
+#   note: "Preprint"
+#   links:
+#     - name: PDF
+#       url: "https://..."
+#     - name: Code
+#       url: "https://github.com/..."

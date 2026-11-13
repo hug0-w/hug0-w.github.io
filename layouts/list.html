@@ -1,0 +1,9 @@
+{{- define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+{{- with .Pages }}
+{{ partial "post-list.html" . }}
+{{- else }}
+<p>Nothing here yet.</p>
+{{- end }}
+{{- end }}

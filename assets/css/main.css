@@ -1,0 +1,179 @@
+/* A plain, high-contrast stylesheet. Earthy neutrals, system fonts, no decoration. */
+
+:root {
+  color-scheme: light;
+  --bg: #f6f3ee;      /* warm off-white */
+  --fg: #1e1c19;      /* near black */
+  --muted: #55504a;   /* dark grey-brown, for dates and footer */
+  --link: #5a4729;    /* brown */
+  --rule: #c9c1b3;    /* light sand, for borders */
+  --code-bg: #ece7df;
+  --measure: 40rem;   /* text width */
+}
+
+/* Dark theme: either chosen by the toggle, or from the system when no choice is saved. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1b1916;
+  --fg: #ebe6dd;
+  --muted: #aaa39a;
+  --link: #d6b98a;
+  --rule: #3d382f;
+  --code-bg: #26231f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #1b1916;
+    --fg: #ebe6dd;
+    --muted: #aaa39a;
+    --link: #d6b98a;
+    --rule: #3d382f;
+    --code-bg: #26231f;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 112.5%;        /* 18px at default browser settings */
+  line-height: 1.65;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 3rem 1.25rem 4rem;
+  background: var(--bg);
+  color: var(--fg);
+}
+@media (min-width: 48em) {
+  body { padding: 6rem 3rem 6rem; }
+}
+
+/* Everything sits in one narrow column with wide margins either side. */
+.site-header, main, .site-footer {
+  max-width: var(--measure);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Links: always underlined, so colour is not the only cue. */
+a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible {
+  outline: 3px solid var(--fg);
+  outline-offset: 3px;
+}
+main:focus { outline: none; }
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -10rem;
+  padding: 0.5rem 1rem;
+  background: var(--fg);
+  color: var(--bg);
+}
+.skip-link:focus { top: 1rem; }
+
+/* Header */
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 3rem;
+}
+.site-header nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.site-header a[aria-current] { color: var(--fg); }
+
+.theme-toggle {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--muted);
+  border-radius: 2px;
+  padding: 0.15em 0.7em;
+  cursor: pointer;
+}
+.theme-toggle[aria-pressed="true"] {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--fg);
+}
+
+/* Text */
+h1, h2, h3 { line-height: 1.25; }
+h1 { font-size: 1.75rem; margin: 0 0 1rem; }
+h2 { font-size: 1.25rem; margin: 2.5rem 0 0.75rem; }
+h3 { font-size: 1.05rem; margin: 2rem 0 0.5rem; }
+p, ul, ol, blockquote, pre, table, figure { margin: 0 0 1.25rem; }
+.meta, time { color: var(--muted); }
+
+/* Lists of posts, links and publications */
+.post-list, .link-list, .pub-list {
+  list-style: none;
+  padding: 0;
+}
+.post-list li, .link-list li { margin: 0 0 0.75rem; }
+.post-list time { display: block; font-size: 0.95rem; }
+@media (min-width: 48em) {
+  .post-list time { display: inline; margin-left: 0.75rem; }
+}
+.pub-list li { margin: 0 0 1.25rem; }
+.pub-links a { margin-right: 0.75rem; }
+
+/* Article content */
+img, video { max-width: 100%; height: auto; }
+figcaption { color: var(--muted); font-size: 0.95rem; }
+blockquote {
+  margin-left: 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--rule);
+}
+code, pre, kbd, samp {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.95em;
+}
+code { background: var(--code-bg); padding: 0.1em 0.3em; }
+pre {
+  padding: 1rem;
+  overflow-x: auto;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+}
+pre code { background: none; padding: 0; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--rule); }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+.back { margin-top: 3rem; }
+
+/* Footer */
+.site-footer {
+  margin-top: 4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.site-footer p { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
