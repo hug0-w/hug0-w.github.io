@@ -4,24 +4,31 @@
 </footer>
 <script>
 (function () {
-  var button = document.getElementById("theme-toggle");
-  if (!button) return;
+  var group = document.getElementById("theme-switch");
+  if (!group) return;
   var root = document.documentElement;
-  var systemDark = window.matchMedia("(prefers-color-scheme: dark)");
-  function current() {
-    return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light");
+  var buttons = group.querySelectorAll("button[data-theme-choice]");
+  function saved() {
+    try { var t = localStorage.getItem("theme"); return t === "light" || t === "dark" ? t : "auto"; }
+    catch (e) { return "auto"; }
   }
-  function update() {
-    button.setAttribute("aria-pressed", current() === "dark" ? "true" : "false");
+  function apply(choice) {
+    if (choice === "auto") {
+      root.removeAttribute("data-theme");
+      try { localStorage.removeItem("theme"); } catch (e) {}
+    } else {
+      root.setAttribute("data-theme", choice);
+      try { localStorage.setItem("theme", choice); } catch (e) {}
+    }
+    for (var i = 0; i < buttons.length; i++) {
+      var b = buttons[i];
+      b.setAttribute("aria-pressed", b.getAttribute("data-theme-choice") === choice ? "true" : "false");
+    }
   }
-  button.addEventListener("click", function () {
-    var next = current() === "dark" ? "light" : "dark";
-    root.setAttribute("data-theme", next);
-    try { localStorage.setItem("theme", next); } catch (e) {}
-    update();
-  });
-  if (systemDark.addEventListener) systemDark.addEventListener("change", update);
-  button.hidden = false;
-  update();
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function () { apply(this.getAttribute("data-theme-choice")); });
+  }
+  apply(saved());
+  group.hidden = false;
 })();
 </script>

@@ -102,19 +102,33 @@ main:focus { outline: none; }
 }
 .site-header a[aria-current] { color: var(--fg); }
 
-.theme-toggle {
+.theme-switch {
+  display: inline-flex;
+  border: 1px solid var(--muted);
+  border-radius: 3px;
+  font-size: 0.95rem;
+}
+.theme-switch button {
+  position: relative;        /* keeps the focus ring above neighbouring buttons */
   font: inherit;
   color: inherit;
   background: transparent;
-  border: 1px solid var(--muted);
-  border-radius: 2px;
-  padding: 0.15em 0.7em;
+  border: 0;
+  padding: 0.2em 0.8em;
   cursor: pointer;
 }
-.theme-toggle[aria-pressed="true"] {
+.theme-switch button + button { border-left: 1px solid var(--muted); }
+.theme-switch button:first-child { border-radius: 2px 0 0 2px; }
+.theme-switch button:last-child { border-radius: 0 2px 2px 0; }
+.theme-switch button:hover { text-decoration: underline; }
+.theme-switch button[aria-pressed="true"] {
   background: var(--fg);
   color: var(--bg);
-  border-color: var(--fg);
+  text-decoration: none;
+}
+.theme-switch button:focus-visible {
+  z-index: 1;
+  outline-offset: 2px;
 }
 
 /* Text */
