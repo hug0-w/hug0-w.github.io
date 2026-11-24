@@ -13,3 +13,14 @@
 #       url: "https://..."
 #     - name: Code
 #       url: "https://github.com/..."
+ - authors: "Wharton H, Ramaswamy A, Mellor S, Puvvada S, Walker M, Bush D, Tierney T, Vivekananda U, Sadrzadeh M"
+   year: 2026
+   title: "Tensor Decompositions of OP-MEG"
+   venue: "Biorxiv Preprint"
+   url: "https://doi.org/10.64898/2026.11.20.766579"
+   note: "Preprint"
+   links:
+     - name: PDF
+       url: "https://www.biorxiv.org/content/10.64898/2026.11.20.766579v1.full.pdf"
+     - name: Code
+       url: "https://github.com/hug0-w/OPM-MEG-cp-pipeline/tree/main"
