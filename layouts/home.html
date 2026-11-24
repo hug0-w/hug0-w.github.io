@@ -24,10 +24,14 @@
   {{- end }}
 </section>
 
-{{- with site.GetPage "/publications" }}
 <section aria-labelledby="pubs-heading">
   <h2 id="pubs-heading">Publications</h2>
-  <p>{{ .Description | default "Papers and preprints." }} <a href="{{ .RelPermalink }}">See the publication list</a>.</p>
+  {{- with site.Data.publications }}
+  {{- $pubs := sort . "year" "desc" }}
+  {{ partial "pub-list.html" (first 5 $pubs) }}
+  {{- if gt (len $pubs) 5 }}<p><a href="{{ "/publications/" | relLangURL }}">All publications</a></p>{{ end }}
+  {{- else }}
+  <p>Nothing here yet.</p>
+  {{- end }}
 </section>
-{{- end }}
 {{- end }}

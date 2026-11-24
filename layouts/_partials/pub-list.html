@@ -1,0 +1,16 @@
+{{- /* Renders a list of publication entries (from data/publications.yaml). */}}
+<ol class="pub-list" role="list" reversed>
+  {{- range . }}
+  <li>
+    {{ .authors }} ({{ .year }}).
+    {{ if .url }}<a href="{{ .url }}">{{ .title }}</a>{{ else }}{{ .title }}{{ end }}.
+    {{- with .venue }} <em>{{ . }}</em>.{{ end }}
+    {{- with .note }} {{ . }}.{{ end }}
+    {{- with .links }}
+    <span class="pub-links">
+      {{- range . }} <a href="{{ .url }}">{{ .name }}</a>{{ end }}
+    </span>
+    {{- end }}
+  </li>
+  {{- end }}
+</ol>
