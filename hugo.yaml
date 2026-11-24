@@ -25,6 +25,8 @@ params:
   description: "PhD student at the MRC Biostatistics Unit, University of Cambridge."
   # Plain text links shown on the home page.
   links:
+    - name: CV
+      url: "/cv.pdf"
     - name: GitHub
       url: "https://github.com/hug0-w"
     - name: Google Scholar
